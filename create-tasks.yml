@@ -1,0 +1,19 @@
+config:
+  target: "https://api.todoist.com/rest/v1"
+  processor: "generator.js"
+  phases:
+    - duration: 3
+      arrivalRate: 1
+  defaults:
+    headers:
+        Authorization: 'Bearer {{ $processEnvironment.TOKEN }}'
+scenarios:
+  - name: "Register a task"
+    flow:
+      - function: "generateRandomTask"
+      - post:
+          url: "/tasks"
+          json:
+            {content: "{{ task }}"}
+      - log: "Task created {{ task }}"
+

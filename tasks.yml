@@ -1,0 +1,33 @@
+config:
+  target: https://api.todoist.com/rest/v1
+  phases:
+    - duration: 1
+      arrivalRate: 1
+  defaults:
+    headers:
+        Authorization: 'Bearer {{ $processEnvironment.TOKEN }}'
+  payload:
+    path: "data.csv"
+    fields:
+      - "task"
+    order: sequence
+    skipHeader: true
+scenarios:
+  - flow:
+    - get:
+        url: "/tasks/{{ task }}"
+    - log: "Get active {{task}}"
+    - post:
+        url: "/tasks/{{ task }}"
+        json:
+          {content: "Update task {{task}}"}
+    - log: "Update active {{task}}"
+    - post:
+        url: "/tasks/{{ task }}/close"
+    - log: "Close task {{task}}"
+    - post:
+        url: "/tasks/{{ task }}/reopen"
+    - log: "Reopen task {{task}}"
+    # - delete:
+    #     url: "/tasks/{{ task }}"
+    # - log: "Delete task {{task}}"

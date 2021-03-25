@@ -1,0 +1,13 @@
+config:
+  target: https://api.todoist.com/rest/v1
+  phases:
+    - duration: 1
+      arrivalRate: 1
+  defaults:
+    headers:
+        Authorization: 'Bearer {{ $processEnvironment.TOKEN }}'
+scenarios:
+  - flow:
+      - get:
+          url: "/tasks"
+      - log: "Get active tasks"
